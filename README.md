@@ -1,3 +1,8 @@
+## **Liability Disclaimer**
+This software is provided for educational and research purposes only.
+The author makes no guarantees about its suitability or safety and is not responsible for any damage, loss, or legal issues arising from its use.
+By using this software, you agree to take full responsibility and use it ethically and lawfully.
+The author shall not be held liable for any consequences resulting from misuse or unauthorized use.
 ## Windows10FakeUpdate  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready when it starts.
 
