@@ -2,7 +2,7 @@ package FileDeleter;
 
 import java.io.File;
 
-//file deleter method
+//file deletion method for all files discovered within test directory
 public class FileDelete {
     public static void main(String[] args) {
        FileDeleter();
