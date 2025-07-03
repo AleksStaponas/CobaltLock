@@ -1,19 +1,19 @@
 ## Windows10FakeUpdate  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready when it starts.
 
-![WindowsFakeUpdate][images/Windows10FakeUpdate.JPG]
+![WindowsFakeUpdate](images/Windows10FakeUpdate.JPG)
 
 ## InitialPhase  
 Initial lock screen phase with timer and shell connection.
 
-![FirstPhase][images/FileLocker_BluePhase.JPG]
+![FirstPhase](images/FileLocker_BluePhase.JPG)
 
 ## SecondPhase  
 Critical phase with timer and increased demands and file deletion if requirements met.
 
-![SecondPhase][images/FileLocker_RedPhase.JPG]
+![SecondPhase](images/FileLocker_RedPhase.JPG)
 
-#MIT License
+## MIT License
 
 Copyright (c) 2025 Aleks Staponas
 
