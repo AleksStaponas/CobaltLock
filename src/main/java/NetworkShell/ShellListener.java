@@ -6,7 +6,7 @@ import java.util.Random;
 
 //listener for reverse shell to allow connection within same network
 
-public class ReverseShellListener {
+public class ShellListener {
     public static void main(String[] args) {
         int port = 4444;
         Random random = new Random();
