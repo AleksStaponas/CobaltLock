@@ -1,22 +1,29 @@
-## **Liability Disclaimer**
-This software is provided for educational and research purposes only.
-The author makes no guarantees about its suitability or safety and is not responsible for any damage, loss, or legal issues arising from its use.
-By using this software, you agree to take full responsibility and use it ethically and lawfully.
+## **Liability Disclaimer**  
+This software is provided for educational and research purposes only.  
+The author makes no guarantees about its suitability or safety, and is not responsible for any damage, loss, or legal issues arising from its use.  
+By using this software, you agree to take full responsibility and use it ethically and lawfully.  
 The author shall not be held liable for any consequences resulting from misuse or unauthorized use.
-## Windows10FakeUpdate  
-A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready when it starts.
 
-![WindowsFakeUpdate](images/Windows10FakeUpdate.JPG)
+## Windows10FakeUpdate  
+A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready and not as alarming to users. Furthermore, this behaviour can often be related to other malware types, such as viruses, that use that time to spread through vulnerabilities such as zero-days, or even install rootkits onto a compromised machine.
+
+<p align="center">
+  <img src="images/Windows10FakeUpdate.JPG" alt="WindowsFakeUpdate" />
+</p>
 
 ## InitialPhase  
-Initial lock screen phase with timer and shell connection.
+Initial lock screen phase with timer and shell connection. This is demonstrated as it is often used in real-world TTPs (Tactics, Techniques, and Procedures), and is commonly shown in attackers' OPSEC operations, which they can use to further escalate privileges or obfuscate logs.
 
-![FirstPhase](images/FileLocker_BluePhase.JPG)
+<p align="center">
+  <img src="images/FileLocker_BluePhase.JPG" alt="FirstPhase" />
+</p>
 
 ## SecondPhase  
-Critical phase with timer and increased demands and file deletion if requirements met.
+Critical phase with timer and increased demands, file deletion if requirements are met with simulated payment code. If demands are not met, this ethical ransomware runs a wipedown where the user's encrypted files are deleted, simulating similar behaviours to the NotPetya ransomware that would delete a compromised machine's files. In this case, it is simulated and only targets files in a specific directory.  
 
-![SecondPhase](images/FileLocker_RedPhase.JPG)
+<p align="center">
+  <img src="images/FileLocker_RedPhase.JPG" alt="SecondPhase" />
+</p>
 
 ## MIT License
 
