@@ -11,8 +11,6 @@ public class ShellListener {
         int port = 4444;
         Random random = new Random();
         boolean isConnected = false;
-        final String PASSWORD = "PASSWORD";//password for connection
-
 
         while (true) {  // run forever
             try (ServerSocket serverSocket = new ServerSocket(port)) {
