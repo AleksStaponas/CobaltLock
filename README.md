@@ -1,8 +1,14 @@
-## **Liability Disclaimer**  
-This software is provided for educational and research purposes only.  
-The author makes no guarantees about its suitability or safety, and is not responsible for any damage, loss, or legal issues arising from its use.  
-By using this software, you agree to take full responsibility and use it ethically and lawfully.  
-The author shall not be held liable for any consequences resulting from misuse or unauthorized use.
+## Legal Disclaimer
+
+This software is provided **strictly for educational, research, and ethical practice purposes only**.
+
+-  **Do NOT use this tool on any system you do not own or have explicit permission to test.**
+-  **Unauthorized use of this software may be illegal and is strictly prohibited.**
+-  **The author takes no responsibility for any damage, data loss, or legal consequences resulting from misuse.**
+
+By using this software, you agree to use it **ethically, lawfully**, and in **controlled environments such as CTFs, virtual labs, or testing networks**.
+
+This tool is intended to help raise awareness and understanding of security threats — **not to promote or enable criminal activity**.
 
 ## Windows10FakeUpdate  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready and not as alarming to users. Furthermore, this behaviour can often be related to other malware types, such as viruses, that use that time to spread through vulnerabilities such as zero-days, or even install rootkits onto a compromised machine.
