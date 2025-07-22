@@ -8,7 +8,7 @@ public class FileDelete {
        FileDeleter();
     }
     public static void FileDeleter() {
-        File dir = new File("JavaSwing/src/main/ExampleFiles");
+        File dir = new File("CobaltLock/src/main/ExampleFiles");
         File[] files = dir.listFiles();
 
         if (files == null) {

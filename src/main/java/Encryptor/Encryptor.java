@@ -20,12 +20,12 @@ public class Encryptor {
     public static void main(String[] args) {
         File f = null;
         String paths[];
-        f = new File("JavaSwing/src/main/ExampleFiles");
+        f = new File("/CobaltLock/src/main/ExampleFiles");
         try {
             encryptedFile(
                     "1234567812345678",  // 16-byte AES key
                     Arrays.toString(paths = f.list()),
-                    "JavaSwing/src/main/ExampleFiles"
+                    "CobaltLock/src/main/ExampleFiles"
             );
 
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class Encryptor {
         var cypher = Cipher.getInstance("AES");
         cypher.init(Cipher.ENCRYPT_MODE, key);
 
-        var fileInput = new File("JavaSwing/src/main/ExampleFiles");
+        var fileInput = new File("CobaltLock/src/main/ExampleFiles");
         var inputStream = new FileInputStream(fileInput);
         var inputBytes = new byte[(int) fileInput.length()];
         inputStream.read(inputBytes);

@@ -25,8 +25,8 @@ public class Decrypt {
                     String outputPath = outputDir + "/" + outputFileName;
                     decryptFile(keyStr, file.getAbsolutePath(), outputPath);
                 } catch (Exception e) {
+                    System.err.println("Exception occurred: " + e.getMessage());
                     System.err.println("Failed to decrypt: " + file.getName());
-                    e.printStackTrace();
                 }
             }
         }

