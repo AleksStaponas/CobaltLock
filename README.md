@@ -10,6 +10,12 @@ By using this software, you agree to use it **ethically, lawfully**, and in **co
 
 This tool is intended to help raise awareness and understanding of security threats — **not to promote or enable criminal activity**.
 
+### Safe Features
+
+- **Safe Decrypt Option:** Instantly restores files to prevent damage during testing.  
+- **Reverse Shell:** Runs via Windows CMD for controlled simulation and has a connector for testing.  
+- **Limited Impact:** Only files in a safe test folder are affected.
+
 ## Windows10FakeUpdate  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready and not as alarming to users. Furthermore, this behaviour can often be related to other malware types, such as viruses, that use that time to spread through vulnerabilities such as zero-days, or even install rootkits onto a compromised machine.
 
