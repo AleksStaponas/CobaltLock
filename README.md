@@ -10,7 +10,7 @@ By using this software, you agree to use it **ethically, lawfully**, and in **co
 
 This tool is intended to help raise awareness and understanding of security threats — **not to promote or enable criminal activity**.
 
-### Safe Features
+## Safety Features
 
 - **Safe Decrypt Option:** Instantly restores files to prevent damage during testing.  
 - **Reverse Shell:** Runs via Windows CMD for controlled simulation and has a connector for testing.  
@@ -37,3 +37,16 @@ Critical phase with timer and increased demands, file deletion if requirements a
   <img src="images/FileLocker_RedPhase.JPG" alt="SecondPhase" />
 </p>
 
+# Current isues
+The current file discovery process fails when the specified path includes a directory. Once it encounters a directory, it is unable to encrypt any files contained within its subdirectories.
+
+## Current file discovery
+<p align="center">
+  <img src="images/Diagrams/CurrentFileDiscoverer.png" alt="CurrentFileDiscovery" />
+</p>
+
+## Updated file discovery
+
+<p align="center">
+  <img src="images/Diagrams/ImprovedFileDiscoverer.png" alt="UpdatedFileDiscovery" />
+</p>
