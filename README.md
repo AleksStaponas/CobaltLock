@@ -37,6 +37,9 @@ Critical phase with timer and increased demands, file deletion if requirements a
   <img src="images/FileLocker_RedPhase.JPG" alt="SecondPhase" />
 </p>
 
+# Updates
+A new feature is nearly complete that generates files with randomized names and content. It demonstrates how attackers use such tactics to lower the likelihood of data recovery and forensic analysis. Furthermore, techniques like this have appeared in real-world ransomware campaigns, including early WannaCry variants.
+
 # Current isues
 The current file discovery process fails when the specified path includes a directory. Once it encounters a directory, it is unable to encrypt any files contained within its subdirectories.
 
