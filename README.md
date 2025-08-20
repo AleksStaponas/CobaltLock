@@ -42,6 +42,116 @@ A new feature is nearly complete that generates files with randomized names and 
 ## Features included in prototype
 - directory and file creation with random dates and times within a year period.
 - multi threading added to improve speed
+<details>
+<summary>Show/Hide Code</summary>
+
+```java
+
+//Disclamer!
+//To prevent any harm to your machine use this code in a safe/testing environment only.
+//I do not take any liability for the codes use.
+
+//Usage
+//Only run this code in compliance with local laws and on systems you own or are authorized to test.
+
+
+import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Main {
+
+    private static void setRandomFileTime(Path path) throws Exception{
+        Random random = new Random();
+        FileTime randomTime = FileTime.from(
+                Instant.now().minusSeconds(random.nextInt(60 * 60 * 24 * 365))
+        );
+        BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
+        view.setTimes(randomTime, randomTime, randomTime);
+
+    }
+
+    public static void shutdown(){
+        System.out.println("Process complete!");
+        System.exit(0);
+    }
+
+    public static void DirectoryCreator(){
+
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (int rp = 0; rp < 15; rp++) {
+
+            Random dir = new Random();
+            String dirChars = "0123456789abcdef";   
+            StringBuilder name = new StringBuilder();
+
+            for (int i = 0; i < 16; i++) {
+                name.append(dirChars.charAt(dir.nextInt(dirChars.length())));
+            }
+
+            Path path = Paths.get(name.toString()); 
+
+            try {
+                Files.createDirectory(path);
+                System.out.println("Directory created " + path.toString());
+                setRandomFileTime(path);
+                Random r = new Random();
+                int fnum = r.nextInt(30);
+
+                for (int frp = 0; frp < fnum; frp++) {
+
+                    Random file = new Random();
+                    String fileChars = "0123456789abcdef";
+
+                    StringBuilder fileName = new StringBuilder();
+
+                    for (int i = 0; i < 16; i++) {
+                        fileName.append(fileChars.charAt(file.nextInt(fileChars.length())));
+                    }
+
+                    Path testFile = Paths.get(name.toString(), fileName.toString());
+
+                    Files.createFile(testFile);
+                    setRandomFileTime(testFile);
+                    System.out.println("File created: " + testFile);
+
+
+                    FileWriter myWriter = new FileWriter(testFile.toFile());
+
+                    String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    Random random = new Random();
+                    int num = random.nextInt(30);
+
+                    for (; num > 0; num--) {
+                        for (int i = 0; i < 64; i++) {
+                            myWriter.write(chars.charAt(r.nextInt(chars.length())));
+                        }
+                    }
+                    myWriter.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Error");
+            }
+        }
+        shutdown();
+    }
+
+    public static void main(String[] args) throws Exception {
+        DirectoryCreator();
+    }
+}
+
+```
+</details> 
+
 # Current isues
 The current file discovery process fails when the specified path includes a directory. Once it encounters a directory, it is unable to encrypt any files contained within its subdirectories.
 
