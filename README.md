@@ -90,21 +90,21 @@ public class Main {
         for (int rp = 0; rp < 15; rp++) {
 
             Random dir = new Random();
-            String dirChars = "0123456789abcdef";   
+            String dirChars = "0123456789abcdef";   // characters to pick from
             StringBuilder name = new StringBuilder();
 
             for (int i = 0; i < 16; i++) {
                 name.append(dirChars.charAt(dir.nextInt(dirChars.length())));
             }
 
-            Path path = Paths.get(name.toString()); 
+            Path path = Paths.get(name+".encrypted");  // convert random string to Path
 
             try {
                 Files.createDirectory(path);
-                System.out.println("Directory created " + path.toString());
-                setRandomFileTime(path);
+                System.out.println("Directory created " + path);
+                setRandomFileTime(Path.of(path.toString()));
                 Random r = new Random();
-                int fnum = r.nextInt(30);
+                int fnum = r.nextInt(20);
 
                 for (int frp = 0; frp < fnum; frp++) {
 
@@ -117,12 +117,13 @@ public class Main {
                         fileName.append(fileChars.charAt(file.nextInt(fileChars.length())));
                     }
 
-                    Path testFile = Paths.get(name.toString(), fileName.toString());
+                    fileName.append(".encrypted");
+
+                    Path testFile = Paths.get(name+".encrypted", fileName.toString());
 
                     Files.createFile(testFile);
                     setRandomFileTime(testFile);
                     System.out.println("File created: " + testFile);
-
 
                     FileWriter myWriter = new FileWriter(testFile.toFile());
 
@@ -135,19 +136,39 @@ public class Main {
                             myWriter.write(chars.charAt(r.nextInt(chars.length())));
                         }
                     }
+
+                    Random dirs = new Random();
+                    String dirCharss = "0123456789abcdef";   // characters to pick from
+                    StringBuilder names = new StringBuilder();
+
+                    for (int i = 0; i < 16; i++) {
+                        names.append(dirChars.charAt(dirs.nextInt(dirCharss.length())));
+                    }
+
+                    fileName.append(".encrypted");
+
+                    Path testFilesz = Paths.get(name+".encrypted", fileName.toString());
+
+                    Files.createDirectory(testFilesz);
+
                     myWriter.close();
+
                 }
+
+
+
             } catch (Exception e) {
-                System.out.println("Error");
+                System.out.println("Error "+e);
             }
         }
         shutdown();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DirectoryCreator();
     }
 }
+
 
 ```
 </details> 
