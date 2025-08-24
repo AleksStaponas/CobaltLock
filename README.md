@@ -52,122 +52,176 @@ A new feature is nearly complete that generates files with randomized names and 
 //I do not take any liability for the codes use.
 
 //Usage
-//Only run this code in compliance with local laws and on systems you own or are authorized to test.
+//Only run this code in compliance with local laws and on systems you own or are authorized to
 
+import java.io.FileOutputStream;
 
-import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+
+import java.nio.file.*;
+
 import java.nio.file.attribute.BasicFileAttributeView;
+
 import java.nio.file.attribute.FileTime;
+
 import java.time.Instant;
+
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class Main {
+public class DistractionFileCreator {
 
-    private static void setRandomFileTime(Path path) throws Exception{
-        Random random = new Random();
-        FileTime randomTime = FileTime.from(
-                Instant.now().minusSeconds(random.nextInt(60 * 60 * 24 * 365))
-        );
-        BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
-        view.setTimes(randomTime, randomTime, randomTime);
+// Write random bytes into a file to mimic encrypted content
+
+public static void writeRandomBytes(Path file, int minBlocks, int maxBlocks) throws IOException {
+
+    Random random = new Random();
+
+    int blocks = random.nextInt(maxBlocks - minBlocks + 1) + minBlocks;
+
+    try (FileOutputStream fos = new FileOutputStream(file.toFile())) {
+
+        for (int i = 0; i < blocks; i++) {
+
+            byte[] randomBytes = new byte[64]; // 64 bytes per block
+
+            random.nextBytes(randomBytes);
+
+            fos.write(randomBytes);
+
+        }
 
     }
 
-    public static void shutdown(){
-        System.out.println("Process complete!");
-        System.exit(0);
-    }
+}
 
-    public static void DirectoryCreator(){
 
-        ExecutorService executor = Executors.newFixedThreadPool(3);
 
-        for (int rp = 0; rp < 15; rp++) {
+// Set random file creation/modification times
 
-            Random dir = new Random();
-            String dirChars = "0123456789abcdef";   // characters to pick from
-            StringBuilder name = new StringBuilder();
+private static void setRandomFileTime(Path path) throws Exception {
 
-            for (int i = 0; i < 16; i++) {
-                name.append(dirChars.charAt(dir.nextInt(dirChars.length())));
-            }
+    Random random = new Random();
 
-            Path path = Paths.get(name+".encrypted");  // convert random string to Path
+    FileTime randomTime = FileTime.from(
 
-            try {
-                Files.createDirectory(path);
-                System.out.println("Directory created " + path);
-                setRandomFileTime(Path.of(path.toString()));
-                Random r = new Random();
-                int fnum = r.nextInt(20);
+            Instant.now().minusSeconds(random.nextInt(60 * 60 * 24 * 365))
 
-                for (int frp = 0; frp < fnum; frp++) {
+    );
 
-                    Random file = new Random();
-                    String fileChars = "0123456789abcdef";
+    BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
 
-                    StringBuilder fileName = new StringBuilder();
+    view.setTimes(randomTime, randomTime, randomTime);
 
-                    for (int i = 0; i < 16; i++) {
-                        fileName.append(fileChars.charAt(file.nextInt(fileChars.length())));
-                    }
+}
 
-                    fileName.append(".encrypted");
 
-                    Path testFile = Paths.get(name+".encrypted", fileName.toString());
 
-                    Files.createFile(testFile);
-                    setRandomFileTime(testFile);
-                    System.out.println("File created: " + testFile);
+public static void shutdown() {
 
-                    FileWriter myWriter = new FileWriter(testFile.toFile());
+    System.out.println("Process complete!");
 
-                    String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                    Random random = new Random();
-                    int num = random.nextInt(30);
+    System.exit(0);
 
-                    for (; num > 0; num--) {
-                        for (int i = 0; i < 64; i++) {
-                            myWriter.write(chars.charAt(r.nextInt(chars.length())));
-                        }
-                    }
+}
 
-                    Random dirs = new Random();
-                    String dirCharss = "0123456789abcdef";   // characters to pick from
-                    StringBuilder names = new StringBuilder();
 
-                    for (int i = 0; i < 16; i++) {
-                        names.append(dirChars.charAt(dirs.nextInt(dirCharss.length())));
-                    }
 
-                    fileName.append(".encrypted");
+public static void DirectoryCreator() {
 
-                    Path testFilesz = Paths.get(name+".encrypted", fileName.toString());
+    Random rand = new Random();
 
-                    Files.createDirectory(testFilesz);
 
-                    myWriter.close();
+
+    for (int rp = 0; rp < 15; rp++) {
+
+        // Safe characters for Windows folder names
+
+        String dirChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        StringBuilder name = new StringBuilder();
+
+        for (int i = 0; i < 16; i++) {
+
+            name.append(dirChars.charAt(rand.nextInt(dirChars.length())));
+
+        }
+
+
+
+        Path path = Paths.get(name + ".encrypted");
+
+
+
+        try {
+
+            Files.createDirectory(path);
+
+            System.out.println("Directory created: " + path);
+
+            setRandomFileTime(path);
+
+
+
+            int fnum = rand.nextInt(20); // number of files per directory
+
+
+
+            for (int frp = 0; frp < fnum; frp++) {
+
+                // Generate safe file name
+
+                StringBuilder fileName = new StringBuilder();
+
+                for (int i = 0; i < 16; i++) {
+
+                    fileName.append(dirChars.charAt(rand.nextInt(dirChars.length())));
 
                 }
 
+                fileName.append(".encrypted");
 
 
-            } catch (Exception e) {
-                System.out.println("Error "+e);
+
+                Path testFile = Paths.get(path.toString(), fileName.toString());
+
+                Files.createFile(testFile);
+
+                setRandomFileTime(testFile);
+
+                System.out.println("File created: " + testFile);
+
+
+
+                // Fill the file with random bytes
+
+                writeRandomBytes(testFile, 5, 30); // 5-30 blocks of 64 bytes
+
             }
+
+
+
+        } catch (Exception e) {
+
+            System.out.println("Error: " + e);
+
         }
-        shutdown();
+
     }
 
-    public static void main(String[] args) {
-        DirectoryCreator();
-    }
+    shutdown();
+
 }
+
+
+
+public static void main(String[] args) {
+
+    DirectoryCreator();
+
+}
+}  
+
+
 
 
 ```
