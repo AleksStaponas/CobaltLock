@@ -39,6 +39,7 @@ Critical phase with timer and increased demands, file deletion if requirements a
 
 # Updates
 A new feature is nearly complete that generates files with randomized names and content. It demonstrates how attackers use such tactics to lower the likelihood of data recovery and forensic analysis. Furthermore, techniques like this have appeared in real-world ransomware campaigns, including early WannaCry variants.
+
 ## Features included in prototype
 - directory and file creation with random dates and times within a year period.
 - multi threading added to improve speed
