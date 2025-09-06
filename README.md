@@ -15,6 +15,7 @@ This tool is intended to help raise awareness and understanding of security thre
 - **Safe Decrypt Option:** Instantly restores files to prevent damage during testing.  
 - **Reverse Shell:** Runs via Windows CMD for controlled simulation and has a connector for testing.  
 - **Limited Impact:** Only files in a safe test folder are affected.
+- **Sandboxed Directory** Preventing any other files being accessed in the file server.
 
 ## Windows10FakeUpdate  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready and not as alarming to users. Furthermore, this behaviour can often be related to other malware types, such as viruses, that use that time to spread through vulnerabilities such as zero-days, or even install rootkits onto a compromised machine.
@@ -38,9 +39,10 @@ Critical phase with timer and increased demands, file deletion if requirements a
 </p>
 
 # Updates
-A new feature is nearly complete that generates files with randomized names and content. It demonstrates how attackers use such tactics to lower the likelihood of data recovery and forensic analysis. Furthermore, techniques like this have appeared in real-world ransomware campaigns, including early WannaCry variants.
+Cross-platform server with automated command deployment and privilege escalation support for Windows and Linux using LinPEAS and WinPEAS.
 
-## Features included in prototype
+## Features included in dir & file creator prototype
+
 - directory and file creation with random dates and times within a year period.
 - multi threading added to improve speed
 <details>
@@ -56,17 +58,11 @@ A new feature is nearly complete that generates files with randomized names and 
 //Only run this code in compliance with local laws and on systems you own or are authorized to
 
 import java.io.FileOutputStream;
-
 import java.io.IOException;
-
 import java.nio.file.*;
-
 import java.nio.file.attribute.BasicFileAttributeView;
-
 import java.nio.file.attribute.FileTime;
-
 import java.time.Instant;
-
 import java.util.Random;
 
 public class DistractionFileCreator {
@@ -95,8 +91,6 @@ public static void writeRandomBytes(Path file, int minBlocks, int maxBlocks) thr
 
 }
 
-
-
 // Set random file creation/modification times
 
 private static void setRandomFileTime(Path path) throws Exception {
@@ -110,33 +104,22 @@ private static void setRandomFileTime(Path path) throws Exception {
     );
 
     BasicFileAttributeView view = Files.getFileAttributeView(path, BasicFileAttributeView.class);
-
     view.setTimes(randomTime, randomTime, randomTime);
 
 }
-
-
-
 public static void shutdown() {
-
     System.out.println("Process complete!");
 
     System.exit(0);
 
 }
 
-
-
 public static void DirectoryCreator() {
-
     Random rand = new Random();
-
-
 
     for (int rp = 0; rp < 15; rp++) {
 
         // Safe characters for Windows folder names
-
         String dirChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         StringBuilder name = new StringBuilder();
@@ -147,11 +130,7 @@ public static void DirectoryCreator() {
 
         }
 
-
-
         Path path = Paths.get(name + ".encrypted");
-
-
 
         try {
 
@@ -161,11 +140,7 @@ public static void DirectoryCreator() {
 
             setRandomFileTime(path);
 
-
-
             int fnum = rand.nextInt(20); // number of files per directory
-
-
 
             for (int frp = 0; frp < fnum; frp++) {
 
@@ -181,49 +156,23 @@ public static void DirectoryCreator() {
 
                 fileName.append(".encrypted");
 
-
-
                 Path testFile = Paths.get(path.toString(), fileName.toString());
-
                 Files.createFile(testFile);
-
                 setRandomFileTime(testFile);
-
                 System.out.println("File created: " + testFile);
-
-
-
                 // Fill the file with random bytes
-
                 writeRandomBytes(testFile, 5, 30); // 5-30 blocks of 64 bytes
-
             }
-
-
-
         } catch (Exception e) {
-
             System.out.println("Error: " + e);
-
         }
-
     }
-
     shutdown();
-
 }
-
-
-
 public static void main(String[] args) {
-
     DirectoryCreator();
-
 }
 }  
-
-
-
 
 ```
 </details> 
