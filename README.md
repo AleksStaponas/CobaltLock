@@ -44,12 +44,12 @@ Cross-platform server with automated command deployment and privilege escalation
 ## Encrypted TLS Server 
 ### Current features
 
-TLS Encrypted Communication: Uses Java SSLServerSocket for secure connections.
-File Serving: Sends requested files from a defined Base_DIR to connected clients.
-Path Traversal Protection: Prevents clients from accessing files outside the designated base directory.
-Event Logging: Logs client IP, request timestamp, and file request outcome to IPLogs.json.
-Threaded Connections: Handles multiple clients concurrently.
-Basic Safety Checks: Blocks invalid requests and logs failed attempts for monitoring.
+- **TLS Encrypted Communication:** Secure connections via Java `SSLServerSocket`.
+- **File Serving:** Sends files from a defined `Base_DIR` to clients.
+- **Path Traversal Protection:** Blocks access outside the base directory.
+- **Event Logging:** Records IP, timestamp, and request outcome in `IPLogs.json`.
+- **Threaded Connections:** Supports multiple clients concurrently.
+- **Safety Checks:** Logs and blocks invalid or failed requests.
 
 ### Features in progress
 Add IP whitelisting, password authentication, and more robust logging/error handling.
