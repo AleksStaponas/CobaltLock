@@ -6,9 +6,11 @@ This software is provided **strictly for educational, research, and ethical prac
 -  **Unauthorized use of this software may be illegal and is strictly prohibited.**
 -  **The author takes no responsibility for any damage, data loss, or legal consequences resulting from misuse.**
 
-By using this software, you agree to use it **ethically, lawfully**, and in **controlled environments such as CTFs, virtual labs, or testing networks**.
+By using this software, you agree to use it **ethically, lawfully**, and in **controlled environments such as virtual labs, or testing networks with legal permission**.
 
 This tool is intended to help raise awareness and understanding of security threats — **not to promote or enable criminal activity**.
+
+> **If anything is still unclear, read the full [Code of Conduct](CODE_OF_CONDUCT.md). The author is not responsible for misuse or misunderstanding of this software.**
 
 ## Safety Features
 
