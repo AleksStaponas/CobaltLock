@@ -209,6 +209,7 @@ public class FileServer {
 }
 
 ```
+</details> 
 
 ## Features included in dir & file creator prototype
 
