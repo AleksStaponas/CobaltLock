@@ -213,6 +213,18 @@ public class FileServer {
 ```
 </details> 
 
+# TLS Keystore Setup
+
+This project requires a Java keystore for TLS.
+
+## Generate `server.keystore` for 
+
+Run the following command:
+
+```bash
+keytool -genkeypair -alias server -keyalg RSA -keysize 2048 -keystore server.keystore -storepass changeit -keypass changeit -dname "CN=localhost, OU=Dev, O=MyOrg, L=MyCity, S=MyState, C=US" -validity 365
+```
+
 ## Features included in dir & file creator prototype
 
 - directory and file creation with random dates and times within a year period.
