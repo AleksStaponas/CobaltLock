@@ -43,7 +43,6 @@ Critical phase with timer and increased demands, file deletion if requirements a
 # Updates
 Cross-platform server with automated command deployment and privilege escalation support for Windows and Linux using LinPEAS and WinPEAS.
 
-## Encrypted TLS Server 
 ### Current features
 
 - **TLS Encrypted Communication:** Secure connections via Java `SSLServerSocket`.
@@ -52,10 +51,12 @@ Cross-platform server with automated command deployment and privilege escalation
 - **Event Logging:** Records IP, timestamp, and request outcome in `IPLogs.json`.
 - **Threaded Connections:** Supports multiple clients concurrently.
 - **Safety Checks:** Logs and blocks invalid or failed requests.
+- **Directory and file creator** The script generates fake, encrypted-style files and directories with randomized timestamps within the past year mimicking common APT distraction methods.
 
 ### Features in progress
 Add IP whitelisting, password authentication, and more robust logging/error handling.
 
+## Encrypted TLS Server 
 <details>
 <summary>Show/Hide Code</summary>
 
