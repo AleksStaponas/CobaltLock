@@ -1,4 +1,4 @@
-*/
+/*
 This code is provided for educational and authorized security testing purposes ONLY.
 
 By using this code, you agree that:
@@ -6,7 +6,8 @@ By using this code, you agree that:
 2. The author takes NO responsibility for misuse, damages, or legal consequences.
 3. Unauthorized use on systems you do not own or have permission for is ILLEGAL.
 
-/*
+*/
+
 package NetworkShell;
 import javax.net.ssl.*;
 import java.io.*;
