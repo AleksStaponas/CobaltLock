@@ -48,7 +48,7 @@ Cross-platform server with automated command deployment and privilege escalation
 - **TLS Encrypted Communication:** Secure connections via Java `SSLServerSocket`.
 - **File Serving:** Sends files from a defined `Base_DIR` to clients.
 - **Path Traversal Protection:** Blocks access outside the base directory.
-- **Event Logging:** Records IP, timestamp, and request outcome in `IPLogs.json`.
+- **Event Logging:** Records IP, timestamp, and request outcome in `IPLogs.json` (will be used to determine if an IP address is permitted to conenct to file server).
 - **Threaded Connections:** Supports multiple clients concurrently.
 - **Safety Checks:** Logs and blocks invalid or failed requests.
 - **Directory and file creator** The script generates fake, encrypted-style files and directories with randomized timestamps within the past year mimicking common APT distraction methods.
