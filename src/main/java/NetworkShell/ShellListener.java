@@ -9,17 +9,36 @@ By using this code, you agree that:
 */
 
 package NetworkShell;
+import com.moandjiezana.toml.Toml;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.security.KeyStore;
 
 public class ShellListener {
 
+    public static long dataCheck(){
+        try {
+            Toml toml = new Toml().read(new File("config.toml"));
+            long shellConnector = toml.getTable("ports").getLong("listener");
+            System.out.println("Set port:" + shellConnector);
+            return shellConnector;
+        }catch (Exception e){
+            System.out.println("Error: "+e.getMessage());
+            System.out.println("No set port using default port 4444");
+            return 4444;
+        }
+    }
+
+
+
     public static void main(String[] args) throws Exception {
-        int port = 4444;
+
+        long lPort = dataCheck();
+        int port = (int)lPort;
 
         String osName = System.getProperty("os.name").toLowerCase();
-        boolean isWindows = osName.contains("win");
+        boolean isWindows = osName.contains("windows");
 
         KeyStore keyStore = KeyStore.getInstance("JKS");
         try (FileInputStream fis = new FileInputStream("/NetworkShell/shellkeystore.jks")) {

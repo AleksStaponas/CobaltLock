@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ServerFirewall {
 
+    //This script is used only to read the data of IPLogs.json
+
     public static List<String> readFileInList(String path){
         List<String> lines = Collections.emptyList();
 

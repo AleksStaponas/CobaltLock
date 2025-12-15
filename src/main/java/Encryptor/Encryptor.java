@@ -20,7 +20,7 @@ public class Encryptor {
     public static void main(String[] args) {
         File f = null;
         String paths[];
-        f = new File("/CobaltLock/src/main/ExampleFiles");
+        f = new File("CobaltLock/src/main/ExampleFiles");
         try {
             encryptedFile(
                     "1234567812345678",  // 16-byte AES key

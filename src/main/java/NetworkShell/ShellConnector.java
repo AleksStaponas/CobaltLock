@@ -10,6 +10,8 @@ Always act ethically and responsibly.
 */
 package NetworkShell;
 
+import com.moandjiezana.toml.Toml;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.InetAddress;
@@ -18,6 +20,45 @@ import java.net.UnknownHostException;
 import java.security.KeyStore;
 
 public class ShellConnector {
+
+        public static long dataPortCheck(){
+        try {
+            Toml toml = new Toml().read(new File("config.toml"));
+
+            long shellConnector = toml.getTable("ports").getLong("connector");
+            System.out.println("Set port:" + shellConnector);
+
+            String shellIP = toml.getTable("ip").getString("ip");
+            System.out.println("Set IP: " + shellIP);
+
+            return shellConnector;
+
+
+        }catch (Exception e){
+            System.out.println("Error: "+e.getMessage());
+            System.out.println("No set port using default port 4444");
+            return 4444;
+        }
+    }
+
+    public static String dataIPCheck(){
+        try {
+            Toml toml = new Toml().read(new File("config.toml"));
+
+            String shellConnector = toml.getTable("ip").getString("ip");
+            System.out.println("Set port:" + shellConnector);
+
+            String shellIP = toml.getTable("ip").getString("ip");
+            System.out.println("Set IP: " + shellIP);
+
+            return shellConnector;
+
+        }catch (Exception e){
+            System.out.println("Error: "+e.getMessage());
+            System.out.println("No set port using default port 4444");
+            return "127.0.0.1";
+        }
+    }
 
     public static SSLSocket createTLSSocket(String host, int port) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("JKS");
@@ -116,8 +157,11 @@ public class ShellConnector {
             throw new RuntimeException(e);
         }
 
-        String host = "192.168.1.123";
-        int port = 4444;
+        String host = dataIPCheck();
+
+        long lPort = dataPortCheck();
+        int port = (int)lPort;
+
 
         System.out.println("Device IP: " + myIp);
         System.out.println("Attempting to connect to: " + host + ":" + port);

