@@ -19,21 +19,28 @@ This tool is intended to help raise awareness and understanding of security thre
 - **Limited Impact:** Only files in a safe test folder are affected.
 - **Sandboxed Directory** Preventing any other files being accessed in the file server.
 
-## Windows10FakeUpdate  
+## Fake Grub Restart
+A fake GRUB loading screen is used as a distraction, allowing files to be encrypted. Following this, it has often been seen in real-world scenarios, such as fake shutdowns being used to allow an attacker to, e.g. , escalate privileges or even maintain persistence. However, after the fake GRUB restart, it continues to the Initial Phase.
+
+<p align="center">
+  <img src="images/FakeGrubBoot.PNG" alt="FirstPhase" />
+</p>
+
+## Windows 10 Fake Update  
 A fake Windows update screen used as a distraction that encrypts discovered files and estimates a time so it is ready and not as alarming to users. Furthermore, this behaviour can often be related to other malware types, such as viruses, that use that time to spread through vulnerabilities such as zero-days, or even install rootkits onto a compromised machine.
 
 <p align="center">
   <img src="images/Windows10FakeUpdate.JPG" alt="WindowsFakeUpdate" />
 </p>
 
-## InitialPhase  
+## Initial Phase  
 Initial lock screen phase with timer and shell connection. This is demonstrated as it is often used in real-world TTPs (Tactics, Techniques, and Procedures), and is commonly shown in attackers' OPSEC operations, which they can use to further escalate privileges or obfuscate logs.
 
 <p align="center">
   <img src="images/FileLocker_BluePhase.JPG" alt="FirstPhase" />
 </p>
 
-## SecondPhase  
+## Second Phase  
 Critical phase with timer and increased demands, file deletion if requirements are met with simulated payment code. If demands are not met, this ethical ransomware runs a wipedown where the user's encrypted files are deleted, simulating similar behaviours to the NotPetya ransomware that would delete a compromised machine's files. In this case, it is simulated and only targets files in a specific directory.  
 
 <p align="center">
